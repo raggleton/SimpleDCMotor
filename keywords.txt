@@ -1,0 +1,22 @@
+#######################################
+# Syntax Coloring Map For SimpleDCMotor
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+SimpleDCMotor	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+forward	KEYWORD2
+backward	KEYWORD2
+brake	KEYWORD2
+setSpeed	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
