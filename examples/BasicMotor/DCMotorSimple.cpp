@@ -11,6 +11,7 @@
  * Robin Aggleton, created 17/8/14
  */
 
+// Do not remove the include below
 #include <SimpleDCMotor.h>
 
 // define pins on Arduino motor shield
@@ -27,18 +28,19 @@ SimpleDCMotor L(dirB, pwmB, brakeB);
 
 void setup() {
 	Serial.begin(9600);
-	// Set initial speed of motors as %s. So here they are full speed.
-	R.setSpeed(100.);
-	L.setSpeed(100.);
+	R.setSpeed(80);
+	L.setSpeed(80);
 }
 
 void loop() {
 	// Do some basic forwards/backwards movement, then pause.
-	R.forward();
-	L.forward();
-	delay(1000);
-	R.backward();
-	L.backward();
+	R.setSpeed(80);
+	L.setSpeed(80);
+	R.run();
+	L.run();
+	delay(500);
+	R.run(-100.);
+	L.run(-100.);
 	delay(1000);
 	R.brake();
 	L.brake();

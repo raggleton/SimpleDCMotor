@@ -13,22 +13,19 @@
 
 #include "Arduino.h"
 
-class SimpleDCMotor
-{
-	public:
-		SimpleDCMotor(int dirPin, int pwmPin, int brakePin);
-		void forward();
-		void backward();
-		void brake();
-		void setSpeed(double speed); // user passes % speed (0 -> 100)
+class SimpleDCMotor {
+public:
+	SimpleDCMotor(int dirPin, int pwmPin, int brakePin); // constructor
+	void run(double speed); // run the motor at a given speed, >0 for forwards, <0 for backwards
+	void run(); // run the motor at whatever was the last stored speed (either via run(speed), or setSpeed(speed))
+	void brake(); // stop the motor
+	void setSpeed(double speed); // set speed of motors
 
-	private:
-		int _dirPin;
-		int _pwmPin;
-		int _brakePin;
-		int _speed; // 0 -> 255, raw value to use with analogWrite()
+private:
+	int _dirPin;
+	int _pwmPin;
+	int _brakePin;
+	int _speed; // -100 -> 100, need to convert to 0->255 + direction
 };
-
-
 
 #endif /* SIMPLEDCMOTOR_H_ */

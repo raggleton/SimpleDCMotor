@@ -11,46 +11,37 @@
 #include "Arduino.h"
 #include "SimpleDCMotor.h"
 
-SimpleDCMotor::SimpleDCMotor(int dirPin, int pwmPin, int brakePin)
-{
+SimpleDCMotor::SimpleDCMotor(int dirPin, int pwmPin, int brakePin) :
+		_dirPin(dirPin), _pwmPin(pwmPin), _brakePin(brakePin), _speed(100) {
 	// Setup pins for motor
-	_dirPin = dirPin;
-	_pwmPin = pwmPin;
-	_brakePin = brakePin;
-	_speed = 0;
 	pinMode(_dirPin, OUTPUT);
 	pinMode(_pwmPin, OUTPUT);
 	pinMode(_brakePin, OUTPUT);
 }
 
-void SimpleDCMotor::forward()
-{
-	analogWrite(_pwmPin, _speed);
+void SimpleDCMotor::run(double speed) {
+	setSpeed(speed);
 	digitalWrite(_brakePin, LOW);
-	digitalWrite(_dirPin, HIGH);
-}
-
-void SimpleDCMotor::backward()
-{
-	analogWrite(_pwmPin, _speed);
-	digitalWrite(_brakePin, LOW);
-	digitalWrite(_dirPin, LOW);
-}
-
-void SimpleDCMotor::brake()
-{
-	digitalWrite(_brakePin, HIGH);
-	analogWrite(_pwmPin, 0);
-}
-
-void SimpleDCMotor::setSpeed(double speed)
-{
-	// User passes in speed as a %
-	// This translates that to 0 -> 255
-	if (speed >= 100) {
-		_speed = 255;
+	if (speed > 0) {
+		digitalWrite(_dirPin, HIGH);
 	} else {
-		_speed = int(255*speed/100); // should round better here
+		digitalWrite(_dirPin, LOW);
 	}
-	analogWrite(_pwmPin, _speed);
+}
+
+void SimpleDCMotor::run() {
+	run(_speed);
+}
+
+void SimpleDCMotor::brake() {
+	digitalWrite(_brakePin, HIGH);
+}
+
+void SimpleDCMotor::setSpeed(double speed) {
+	// Takes in speed as a %, with sign as direction
+	// we don't care about direction - just how fast to turn the wheels!
+	_speed = speed; // store for future
+	speed = constrain(abs(speed), 0., 100.); // check it's actually 0 -> 100
+	// Need to translate that to 0 -> 255 to send to pwm pin
+	analogWrite(_pwmPin, round(255 * speed / 100.));
 }
